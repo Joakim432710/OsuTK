@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using OpenTK.Input;
 
 namespace OsuTK
 {
@@ -10,7 +9,6 @@ namespace OsuTK
         GameStateObject CurrentGameStateObject { get; }
         GameStateObject GetGameStateObject(GameState state);
         void SetGameState(GameState state);
-
         void SetMouseBasedViewport(bool follow);
     }
 }

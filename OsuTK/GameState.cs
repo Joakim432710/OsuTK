@@ -7,52 +7,63 @@ namespace OsuTK
     {
         public readonly ulong Identifier;
         public readonly string Name;
-        public GameState(byte val, [NotNull]string name)
+
+        public GameState(byte val, [NotNull] string name)
         {
             Identifier = val;
             Name = name;
         }
-        public GameState(sbyte val, [NotNull]string name)
+
+        public GameState(sbyte val, [NotNull] string name)
         {
-            Identifier = (byte)val;
+            Identifier = (byte) val;
             Name = name;
         }
-        public GameState(short val, [NotNull]string name)
+
+        public GameState(short val, [NotNull] string name)
         {
-            Identifier = (ushort)val;
+            Identifier = (ushort) val;
             Name = name;
         }
-        public GameState(ushort val, [NotNull]string name)
+
+        public GameState(ushort val, [NotNull] string name)
         {
             Identifier = val;
             Name = name;
         }
-        public GameState(int val, [NotNull]string name)
+
+        public GameState(int val, [NotNull] string name)
         {
-            Identifier = (uint)val;
+            Identifier = (uint) val;
             Name = name;
         }
-        public GameState(uint val, [NotNull]string name)
+
+        public GameState(uint val, [NotNull] string name)
         {
             Identifier = val;
             Name = name;
         }
-        public GameState(long val, [NotNull]string name)
+
+        public GameState(long val, [NotNull] string name)
         {
-            Identifier = (ulong)val;
+            Identifier = (ulong) val;
             Name = name;
         }
-        public GameState(ulong val, [NotNull]string name)
+
+        public GameState(ulong val, [NotNull] string name)
         {
             Identifier = val;
             Name = name;
         }
-        public GameState(byte[] val, [NotNull]string name)
+
+        public GameState(byte[] val, [NotNull] string name)
         {
-            if (val.Length > 8) throw new ArgumentOutOfRangeException(nameof(val), "Passed byte array's length must be in range (0, 8) inclusive.");
+            if (val.Length > 8)
+                throw new ArgumentOutOfRangeException(nameof(val),
+                    "Passed byte array's length must be in range (0, 8) inclusive.");
             ulong finalValue = 0;
             for (var iii = 0; iii < val.Length; ++iii)
-                finalValue += ((ulong)Math.Pow(256, iii)) * val[iii];
+                finalValue += ((ulong) Math.Pow(256, iii))*val[iii];
             Identifier = finalValue;
             Name = name;
         }
@@ -69,7 +80,7 @@ namespace OsuTK
 
         public override bool Equals(object obj)
         {
-            return (obj is GameState) && Equals((GameState)obj);
+            return (obj is GameState) && Equals((GameState) obj);
         }
 
         public bool Equals(GameState obj)

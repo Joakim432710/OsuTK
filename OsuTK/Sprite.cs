@@ -6,10 +6,6 @@ namespace OsuTK
 {
     public class Sprite : IDisposable, IRenderable
     {
-        protected Texture Texture { get; }
-        protected Vector2 Position { get; set;  }
-        protected Vector2 Size { get; set; }
-
         protected Sprite(Texture texture, Vector2 position, Vector2 size)
         {
             Texture = texture;
@@ -28,11 +24,14 @@ namespace OsuTK
             Size = Texture.Size;
         }
 
+        protected Texture Texture { get; }
+        protected Vector2 Position { get; set; }
+        protected Vector2 Size { get; set; }
+
         public void Dispose()
         {
             Texture.Dispose();
         }
-
 
         public void Render()
         {
@@ -54,13 +53,12 @@ namespace OsuTK
             GL.Vertex2(0, Size.Y);
 
             GL.End();
-            
+
             Texture.Unbind();
         }
 
         public void Resize(int width, int height)
         {
-
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using OpenTK.Input;
-
-namespace OsuTK
+﻿namespace OsuTK
 {
     public abstract class GameStateObject
     {
@@ -8,7 +6,6 @@ namespace OsuTK
         public abstract void Unload();
         public abstract void Render();
         public abstract void Update(double dT);
-
         public abstract void MouseMoved(float x, float y);
     }
 }

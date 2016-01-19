@@ -11,17 +11,22 @@ namespace OsuTK
 {
     public class OsuTK : GameWindow, IStateBasedGame
     {
+        private const float ShowPercent = 0.9f;
+        private const float HidePercent = 0.1f;
         public static string SkinDirectory = Path.Combine(Path.Combine(Environment.CurrentDirectory, "Skins"), "Default");
         public static GameState MainMenu = new GameState(0, "MainMenu");
-        public Dictionary<GameState, GameStateObject> GameStateObjects { get; } = new Dictionary<GameState, GameStateObject>
+        private MouseState _lastKnownMouseState;
+        protected Vector2 IntendedSize = new Vector2(4096, 2160);
+        protected bool MouseBasedViewport { get; set; }
+
+        public Dictionary<GameState, GameStateObject> GameStateObjects { get; } = new Dictionary
+            <GameState, GameStateObject>
         {
             [MainMenu] = new MainMenuScreen()
         };
-        protected Vector2 IntendedSize = new Vector2(4096, 2160);
 
         public GameState CurrentGameState { get; private set; }
         public GameStateObject CurrentGameStateObject { get; private set; }
-
 
         public GameStateObject GetGameStateObject(GameState state)
         {
@@ -42,10 +47,6 @@ namespace OsuTK
             UpdateViewport();
         }
 
-        public OsuTK()
-        {
-        }
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -54,7 +55,8 @@ namespace OsuTK
             GL.Viewport(0, 0, Width, Height);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Ortho(0.0f, IntendedSize.X, IntendedSize.Y, 0.0f, 0.0f, 1.0f); //Map (0, 0) -> (0, 0) and (Width, Height) -> (1, 1)
+            GL.Ortho(0.0f, IntendedSize.X, IntendedSize.Y, 0.0f, 0.0f, 1.0f);
+                //Map (0, 0) -> (0, 0) and (Width, Height) -> (1, 1)
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.AlphaTest);
             GL.Enable(EnableCap.Blend);
@@ -67,7 +69,6 @@ namespace OsuTK
             CurrentGameStateObject.Load(this);
         }
 
-        protected bool MouseBasedViewport { get; set; }
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
@@ -103,31 +104,32 @@ namespace OsuTK
             UpdateViewport();
         }
 
-        private const float ShowPercent = 0.9f;
-        private const float HidePercent = 0.1f;
-        private MouseState _lastKnownMouseState;
         protected void UpdateViewport()
         {
             //Derived from Note 4 in OnResize
-            var aspectRatio = ((float)Width / Height);
-            var targetAspectRatio = (IntendedSize.X / IntendedSize.Y);
+            var aspectRatio = ((float) Width/Height);
+            var targetAspectRatio = (IntendedSize.X/IntendedSize.Y);
             if (targetAspectRatio > aspectRatio) //This means our target width is wider, hide width of image
             {
-                var newWidth = (int)(Height * targetAspectRatio);
-                var errorAddition = (float)(Width - newWidth) / 2;
+                var newWidth = (int) (Height*targetAspectRatio);
+                var errorAddition = (float) (Width - newWidth)/2;
                 if (MouseBasedViewport)
-                    GL.Viewport((int)(errorAddition - (int)(0.02 * _lastKnownMouseState.X)), (int)(0.02 * _lastKnownMouseState.Y) - (int)(0.02 * Height), (int)(1.02 * newWidth), (int)(1.02 * Height));
+                    GL.Viewport((int) (errorAddition - (int) (0.02*_lastKnownMouseState.X)),
+                        (int) (0.02*_lastKnownMouseState.Y) - (int) (0.02*Height), (int) (1.02*newWidth),
+                        (int) (1.02*Height));
                 else
-                    GL.Viewport((int)errorAddition, 0, newWidth, Height);
+                    GL.Viewport((int) errorAddition, 0, newWidth, Height);
             }
             else //This means our current width is wider, hide height of image
             {
-                var newHeight = (int)(Width / targetAspectRatio);
-                var errorAddition = (float)(Height - newHeight) / 2;
+                var newHeight = (int) (Width/targetAspectRatio);
+                var errorAddition = (float) (Height - newHeight)/2;
                 if (MouseBasedViewport)
-                    GL.Viewport(-(int)(0.02 * _lastKnownMouseState.X), (int)(errorAddition + (int)(0.02 * _lastKnownMouseState.Y) - (int)(0.02 * Height)), (int)(1.02 * Width), (int)(1.02 * newHeight));
+                    GL.Viewport(-(int) (0.02*_lastKnownMouseState.X),
+                        (int) (errorAddition + (int) (0.02*_lastKnownMouseState.Y) - (int) (0.02*Height)),
+                        (int) (1.02*Width), (int) (1.02*newHeight));
                 else
-                    GL.Viewport(0, (int)errorAddition, Width, newHeight);
+                    GL.Viewport(0, (int) errorAddition, Width, newHeight);
             }
         }
 
@@ -136,7 +138,7 @@ namespace OsuTK
             base.OnMouseMove(e);
             _lastKnownMouseState = e.Mouse;
             UpdateViewport();
-            CurrentGameStateObject.MouseMoved(IntendedSize.X * e.X / Width, IntendedSize.Y * e.Y / Height);
+            CurrentGameStateObject.MouseMoved(IntendedSize.X*e.X/Width, IntendedSize.Y*e.Y/Height);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
